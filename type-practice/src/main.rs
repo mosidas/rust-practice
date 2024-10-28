@@ -10,6 +10,7 @@ fn main() {
     type_vector();
     type_string();
     type_struct();
+    method();
 }
 
 fn type_unit() {
@@ -128,7 +129,7 @@ fn type_string() {
     println!("{}", &s1[0..2]); // he
     let s2 = "あいうえお";
     println!("{}", &s2[0..6]); // あい
-    println!("{}", &s2[0..5]); // panic: 'byte index 5 is a char boundary; it is inside 'い' (bytes 3..6) of `あいうえお`'
+                               // println!("{}", &s2[0..5]); // panic: 'byte index 5 is a char boundary; it is inside 'い' (bytes 3..6) of `あいうえお`'
 
     for c in s2.chars() {
         // character iterator
@@ -169,4 +170,36 @@ fn type_struct() {
     struct Color(i32, i32, i32);
     let black = Color(0, 0, 0);
     println!("{} {} {}", black.0, black.1, black.2); // 0 0 0
+
+    // unit struct
+    struct Unit();
+    let unit = Unit();
+}
+
+fn method() {
+    struct User {
+        username: String,
+        age: u32,
+    }
+
+    impl User {
+        fn print_username(&self) {
+            println!("{}", self.username);
+        }
+
+        fn add_age(&mut self, n: u32) {
+            self.age += n;
+        }
+    }
+
+    let mut user = User {
+        username: String::from("user1"),
+        age: 20,
+    };
+    user.print_username(); // user1
+    user.add_age(1);
+    println!("{}", user.age); // 21
+    println!("{}", user.age); // 21
+    println!("{}", user.username); // user1
+    println!("{}", user.username); // user1
 }
