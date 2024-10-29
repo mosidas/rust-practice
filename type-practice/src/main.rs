@@ -10,7 +10,6 @@ fn main() {
     type_vector();
     type_string();
     type_struct();
-    method();
 }
 
 fn type_unit() {
@@ -174,32 +173,4 @@ fn type_struct() {
     // unit struct
     struct Unit();
     let unit = Unit();
-}
-
-fn method() {
-    struct User {
-        username: String,
-        age: u32,
-    }
-
-    impl User {
-        fn print_username(&self) {
-            println!("{}", self.username);
-        }
-
-        fn add_age(&mut self, n: u32) {
-            self.age += n;
-        }
-    }
-
-    let mut user = User {
-        username: String::from("user1"),
-        age: 20,
-    };
-    user.print_username(); // user1
-    user.add_age(1);
-    println!("{}", user.age); // 21
-    println!("{}", user.age); // 21
-    println!("{}", user.username); // user1
-    println!("{}", user.username); // user1
 }
