@@ -9,6 +9,10 @@ fn main() {
     borrow_reference_mut();
     println!("--lifetime_parameter--");
     lifetime_parameter();
+    println!("--clone_reference--");
+    clone_reference();
+    println!("--clone_reference2--");
+    clone_reference2();
 }
 
 fn copy_semantics() {
@@ -98,3 +102,52 @@ fn pick2<'a, 'b>(x: &'a [i32], y: &'b [i32], end: usize) -> (&'a [i32], &'b [i32
 // fn pick3<'a, 'b>(x: &'a [i32], y: &'b [i32], end: usize) -> (&'b [i32], &'a [i32]) {
 //     (&x[..end], &y[..end]) // error: lifetime may not live long enough
 // }
+
+fn clone_reference() {
+    #[derive(Clone)]
+    struct ChildStruct {
+        d: i64,
+    }
+
+    #[derive(Clone)]
+    struct MyStruct {
+        a: i64,
+        c: ChildStruct,
+    }
+
+    let mut obj = MyStruct {
+        a: 0,
+        c: ChildStruct { d: 10 },
+    };
+    let copy = obj.clone();
+
+    obj.a = 5;
+    obj.c.d = 100;
+
+    println!("{}", copy.a); // => 0
+    println!("{}", copy.c.d); // => 10
+}
+
+fn clone_reference2() {
+    use std::cell::Cell;
+    #[derive(Clone)]
+    struct ChildStruct {
+        d: Cell<i64>,
+    }
+
+    #[derive(Clone)]
+    struct MyStruct<'a> {
+        a: i64,
+        c: &'a ChildStruct,
+    }
+
+    let child = ChildStruct { d: Cell::new(10) };
+    let mut obj = MyStruct { a: 0, c: &child };
+    let copy = obj.clone();
+
+    obj.a = 5;
+    obj.c.d.set(100);
+
+    println!("{}", copy.a); // => 0
+    println!("{}", copy.c.d.get()); // => 100
+}

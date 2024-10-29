@@ -10,6 +10,7 @@ fn main() {
     type_vector();
     type_string();
     type_struct();
+    type_enum();
 }
 
 fn type_unit() {
@@ -173,4 +174,42 @@ fn type_struct() {
     // unit struct
     struct Unit();
     let unit = Unit();
+}
+
+fn type_enum() {
+    println!("{:?}", get_sign(1)); // Positive
+    println!("{:?}", get_sign(0)); // Zero
+    println!("{:?}", get_sign(-1)); // Negative
+    println!("{:?}", get_sign_order(1)); // Positive
+    println!("{:?}", get_sign_order(0)); // Zero
+    println!("{:?}", get_sign_order(-1)); // Negative
+}
+
+#[derive(Debug)]
+enum Sign {
+    Positive,
+    Zero,
+    Negative,
+}
+
+fn get_sign(n: i32) -> Sign {
+    match n {
+        0 => Sign::Zero,
+        n if n > 0 => Sign::Positive,
+        _ => Sign::Negative,
+    }
+}
+
+fn get_sign_order(n: i32) -> Sign {
+    use std::cmp::Ordering;
+    match n.cmp(&0) {
+        Ordering::Less => Sign::Negative,
+        Ordering::Equal => Sign::Zero,
+        Ordering::Greater => Sign::Positive,
+    }
+}
+
+enum EnumExample {
+    Exp1(i32, i32),
+    Exp2(String, char),
 }
