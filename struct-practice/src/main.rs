@@ -5,6 +5,11 @@ fn main() {
     sample();
     trait_sample::print_debug_user();
     trait_sample::print_copy_user();
+
+    let mut rect = Rectangle::new(30, 50);
+    println!("{}", rect.area());
+    rect.replace(40, 60);
+    println!("{}", rect.area());
 }
 
 fn sample() {
@@ -39,4 +44,26 @@ fn sample() {
     user.print_username();
     user.add_age(4);
     println!("{}", user.age);
+}
+
+struct Rectangle {
+    width: u32,
+    height: u32,
+}
+
+impl Rectangle {
+    fn new(width: u32, height: u32) -> Rectangle {
+        Rectangle { width, height }
+    }
+
+    fn area(&self) -> u32 {
+        // &self: immutable reference
+        self.width * self.height
+    }
+
+    fn replace(&mut self, width: u32, height: u32) {
+        // &mut self: mutable reference
+        self.width = width;
+        self.height = height;
+    }
 }
