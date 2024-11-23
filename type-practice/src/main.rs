@@ -1,3 +1,6 @@
+use serde_json::json;
+use std::collections::HashMap;
+
 fn main() {
     type_unit();
     type_integer();
@@ -11,6 +14,7 @@ fn main() {
     type_string();
     type_struct();
     type_enum();
+    type_util();
 }
 
 fn type_unit() {
@@ -212,4 +216,36 @@ fn get_sign_order(n: i32) -> Sign {
 enum EnumExample {
     Exp1(i32, i32),
     Exp2(String, char),
+}
+
+fn type_util() {
+    // Hashmap
+    let mut capitals = HashMap::new();
+    capitals.insert("Japan", "Tokyo");
+    capitals.insert("USA", "Washington D.C.");
+
+    let japan = capitals.get("Japan");
+    println!("{:?}", japan); // Some("Tokyo")
+
+    // Json
+    let data = json!({
+        "name": "John Doe",
+        "age": 30,
+        "is_student": false,
+        "hobbies": ["reading", "music"]
+    });
+
+    println!("john {:?}", data); // {"age":30,"hobbies":["reading","music"],"is_student":false,"name":"John Doe"}
+
+    println!("name {}", data["name"]); // "John Doe"
+    println!("name {}", data["name"].as_str().unwrap()); // John Doe
+    println!("age {}", data["age"]); // 30
+
+    let mut data2 = json!({});
+    data2["name"] = json!("Jane Doe2");
+    data2["age"] = json!(20);
+
+    let mut members = json!({});
+    members["members"] = json!([data, data2]);
+    println!("{}", members.to_string()); // {"members":[{"age":30,"hobbies":["reading","music"],"is_student":false,"name":"John Doe"},{"age":20,"name":"Jane Doe2"}]}
 }
