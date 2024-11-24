@@ -11,6 +11,7 @@ fn main() {
     type_string();
     type_struct();
     method();
+    option();
 }
 
 fn type_unit() {
@@ -202,4 +203,30 @@ fn method() {
     println!("{}", user.age); // 21
     println!("{}", user.username); // user1
     println!("{}", user.username); // user1
+}
+
+fn option() {
+    let a = division(1, 0);
+    println!("{:?}", a); // None
+    if let Some(result) = a {
+        println!("{}", result);
+    } else {
+        println!("error");
+    }
+
+    let b = division(1, 1);
+    println!("{:?}", b); // Some(1)
+    if let Some(result) = b {
+        println!("{}", result);
+    } else {
+        println!("error");
+    }
+}
+
+fn division(a: i32, b: i32) -> Option<i32> {
+    if b == 0 {
+        None
+    } else {
+        Some(a / b)
+    }
 }
