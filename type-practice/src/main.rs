@@ -1,3 +1,6 @@
+use serde_json::json;
+use std::collections::HashMap;
+
 fn main() {
     type_unit();
     type_integer();
@@ -10,7 +13,8 @@ fn main() {
     type_vector();
     type_string();
     type_struct();
-    method();
+    type_enum();
+    type_util();
     option();
 }
 
@@ -177,32 +181,74 @@ fn type_struct() {
     let unit = Unit();
 }
 
-fn method() {
-    struct User {
-        username: String,
-        age: u32,
+fn type_enum() {
+    println!("{:?}", get_sign(1)); // Positive
+    println!("{:?}", get_sign(0)); // Zero
+    println!("{:?}", get_sign(-1)); // Negative
+    println!("{:?}", get_sign_order(1)); // Positive
+    println!("{:?}", get_sign_order(0)); // Zero
+    println!("{:?}", get_sign_order(-1)); // Negative
+}
+
+#[derive(Debug)]
+enum Sign {
+    Positive,
+    Zero,
+    Negative,
+}
+
+fn get_sign(n: i32) -> Sign {
+    match n {
+        0 => Sign::Zero,
+        n if n > 0 => Sign::Positive,
+        _ => Sign::Negative,
     }
+}
 
-    impl User {
-        fn print_username(&self) {
-            println!("{}", self.username);
-        }
-
-        fn add_age(&mut self, n: u32) {
-            self.age += n;
-        }
+fn get_sign_order(n: i32) -> Sign {
+    use std::cmp::Ordering;
+    match n.cmp(&0) {
+        Ordering::Less => Sign::Negative,
+        Ordering::Equal => Sign::Zero,
+        Ordering::Greater => Sign::Positive,
     }
+}
 
-    let mut user = User {
-        username: String::from("user1"),
-        age: 20,
-    };
-    user.print_username(); // user1
-    user.add_age(1);
-    println!("{}", user.age); // 21
-    println!("{}", user.age); // 21
-    println!("{}", user.username); // user1
-    println!("{}", user.username); // user1
+enum EnumExample {
+    Exp1(i32, i32),
+    Exp2(String, char),
+}
+
+fn type_util() {
+    // Hashmap
+    let mut capitals = HashMap::new();
+    capitals.insert("Japan", "Tokyo");
+    capitals.insert("USA", "Washington D.C.");
+
+    let japan = capitals.get("Japan");
+    println!("{:?}", japan); // Some("Tokyo")
+
+    // Json
+    let data = json!({
+        "name": "John Doe",
+        "age": 30,
+        "is_student": false,
+        "hobbies": ["reading", "music"]
+    });
+
+    println!("john {:?}", data); // {"age":30,"hobbies":["reading","music"],"is_student":false,"name":"John Doe"}
+
+    println!("name {}", data["name"]); // "John Doe"
+    println!("name {}", data["name"].as_str().unwrap()); // John Doe
+    println!("age {}", data["age"]); // 30
+
+    let mut data2 = json!({});
+    data2["name"] = json!("Jane Doe2");
+    data2["age"] = json!(20);
+
+    let mut members = json!({});
+    members["members"] = json!([data, data2]);
+    println!("{}", members.to_string()); // {"members":[{"age":30,"hobbies":["reading","music"],"is_student":false,"name":"John Doe"},{"age":20,"name":"Jane Doe2"}]}
 }
 
 fn option() {
