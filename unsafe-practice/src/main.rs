@@ -95,7 +95,7 @@ struct DataB {
 
 fn set_data(data_a: &mut DataA, data_b: &mut DataB, value: i32) {
     let number = Rc::new(value + 10);
-    data_a.number_a = Some(Rc::clone(&number));
+    data_a.number_a = Some(Rc::clone(&number)); // let y = x.clone() ≒ let y = Rc::clone(&x). but latter is faster.
     data_b.number_b = Some(Rc::clone(&number));
 }
 

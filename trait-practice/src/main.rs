@@ -2,6 +2,7 @@ fn main() {
     trait_example();
     trait_example2();
     trait_example3();
+    trait_example4();
 }
 
 fn trait_example() {
@@ -188,4 +189,82 @@ fn trait_example3() {
     println!("p6: {:?}", p6);
     println!("p7: {:?}", p7);
     println!("p6 < p7? : {}", p6 < p7);
+}
+
+trait SayHello {
+    fn say_hello(&self);
+}
+
+trait SayThankyou {
+    fn say_thank_you(&self);
+}
+
+struct EnglishPerson;
+struct SpanishPerson;
+
+impl SayHello for EnglishPerson {
+    fn say_hello(&self) {
+        println!("Hello!")
+    }
+}
+
+impl SayThankyou for EnglishPerson {
+    fn say_thank_you(&self) {
+        println!("Thank you!")
+    }
+}
+
+impl SayHello for SpanishPerson {
+    fn say_hello(&self) {
+        println!("Hola")
+    }
+}
+
+impl SayThankyou for SpanishPerson {
+    fn say_thank_you(&self) {
+        println!("Gracias")
+    }
+}
+
+trait Run {
+    fn run(&self);
+}
+
+impl Run for EnglishPerson {
+    fn run(&self) {
+        println!("Run!!!")
+    }
+}
+
+impl Run for SpanishPerson {
+    fn run(&self) {
+        println!("Correr!!!")
+    }
+}
+
+fn say_hello_general<T: SayHello>(speaker: &T) {
+    speaker.say_hello();
+}
+
+fn say_thank_you_general<T: SayThankyou>(speaker: &T) {
+    speaker.say_thank_you();
+}
+
+fn say_thank_you_and_run<T: SayThankyou + Run>(person: &T) {
+    person.say_thank_you();
+    person.run();
+}
+
+fn trait_example4() {
+    let en = EnglishPerson;
+    let sp = SpanishPerson;
+
+    say_hello_general(&en);
+    say_thank_you_general(&en);
+
+    say_hello_general(&sp);
+    say_thank_you_general(&sp);
+
+    say_thank_you_and_run(&en);
+    say_thank_you_and_run(&sp);
 }
